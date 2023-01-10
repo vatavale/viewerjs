@@ -1,5 +1,4 @@
-# Fork with Video and Audio files view support
-(special thanks to [plepe](https://github.com/plepe/viewerjs/tree/video) for video format support)
+# Viewer.js fork with video and audio files support
 
 # Viewer.js
 

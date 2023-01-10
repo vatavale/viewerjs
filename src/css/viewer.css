@@ -118,14 +118,14 @@
   width: 90%;
 }
 .viewer-canvas > .audio > div {
-  inset: 0 5% 100px;
   color: #fff;
-  margin: auto;
-  position: absolute;
-  width: 90%;
   font-size: 1rem;
   height: 2rem;
+  inset: 0 5% 100px;
+  margin: auto;
+  position: absolute;
   text-align: center;
+  width: 90%;
 }
 .viewer-footer {
   bottom: 0;
@@ -260,7 +260,6 @@
   text-align: center;
   top: 50%;
   width: 50px;
-  width: 50px;
 }
 .viewer-title {
   color: #ccc;
@@ -280,6 +279,7 @@
   opacity: 1;
 }
 .viewer-button {
+  -webkit-app-region: no-drag;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   cursor: pointer;
@@ -290,7 +290,6 @@
   top: -40px;
   transition: background-color 0.15s;
   width: 80px;
-  -webkit-app-region: no-drag;
 }
 .viewer-button:focus, .viewer-button:hover {
   background-color: rgba(0, 0, 0, 0.8);

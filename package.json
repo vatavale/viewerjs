@@ -1,6 +1,6 @@
 {
   "name": "viewerjs",
-  "description": "JavaScript image viewer.",
+  "description": "JavaScript viewer for iamges, video and audio.",
   "version": "1.11.2",
   "main": "dist/viewer.common.js",
   "module": "dist/viewer.esm.js",
@@ -26,6 +26,7 @@
     "lint:js": "eslint . --fix",
     "prepare": "husky install",
     "release": "npm run clean && npm run lint && npm run build && npm run compress && npm run copy && npm test",
+    "release2": "npm run clean && npm run build && npm run compress && npm run copy",
     "start": "npm-run-all --parallel watch:*",
     "test": "karma start",
     "test:coverage": "cat coverage/lcov.info | codecov",
@@ -34,7 +35,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fengyuanchen/viewerjs.git"
+    "url": "git+https://github.com/vatavale/viewerjs.git"
   },
   "keywords": [
     "image",
@@ -45,17 +46,28 @@
     "css",
     "javascript",
     "front-end",
-    "web"
+    "web",
+    "video",
+    "audio"
   ],
   "author": {
     "name": "Chen Fengyuan",
     "url": "https://chenfengyuan.com/"
   },
+  "contributors": [
+    {
+      "name": "Chen Fengyuan",
+      "url": "https://chenfengyuan.com/"
+    },
+    {
+      "name": "Alex Vatavu"
+    }
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fengyuanchen/viewerjs/issues"
+    "url": "https://github.com/vatavale/viewerjs/issues"
   },
-  "homepage": "https://fengyuanchen.github.io/viewerjs",
+  "homepage": "https://github.com/vatavale/viewerjs/tree/multi-formats",
   "devDependencies": {
     "@babel/core": "^7.20.7",
     "@babel/preset-env": "^7.20.2",

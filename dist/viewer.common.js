@@ -1,11 +1,11 @@
 /*!
  * Viewer.js v1.11.2
- * https://fengyuanchen.github.io/viewerjs
+ * https://github.com/vatavale/viewerjs/tree/multi-formats
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-01-09T23:41:36.873Z
+ * Date: 2023-01-10T09:26:29.062Z
  */
 
 'use strict';
@@ -3278,4 +3278,3 @@ var Viewer = /*#__PURE__*/function () {
 assign(Viewer.prototype, render, events, handlers, methods, others);
 
 module.exports = Viewer;
-//# sourceMappingURL=viewer.common.js.map
