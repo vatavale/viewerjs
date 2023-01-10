@@ -13,6 +13,7 @@ import {
   EVENT_ERROR,
   EVENT_HIDE,
   EVENT_LOAD,
+  EVENT_LOADEDMETADATA,
   EVENT_MOVE,
   EVENT_MOVED,
   EVENT_PLAY,
@@ -240,7 +241,7 @@ export default {
     const img = item.querySelector('img');
     const url = getData(img, 'originalUrl');
     const alt = img.getAttribute('alt');
-    const image = document.createElement('img');
+    let image = null;
 
     forEach(options.inheritedAttributes, (name) => {
       const value = img.getAttribute(name);
@@ -250,8 +251,39 @@ export default {
       }
     });
 
-    image.src = url;
-    image.alt = alt;
+    // video
+    if (url.match(/\.mov|.avi|.qt'|.mp4|.mkv|.wmv|.web|.mpe|.mpg|.m2v|.m4v|.mts|.ts'|.3gp|.flv|.f4v|.ogv$/)) {
+      image = document.createElement('video');
+      image.controls = true;
+      image.autoplay = true;
+      image.alt = alt;
+
+      const videoSource = document.createElement('source');
+      videoSource.src = url;
+      videoSource.type = 'video/mp4';
+      image.appendChild(videoSource);
+
+      // audio
+    } else if (url.match(/\.wav|.mp3|.fla|.m4a|.m4b|.m4p|.opu|.wma|.pcm|.aif|.aac|.oga$/)) {
+      image = document.createElement('div');
+      image.classList.add('audio');
+      const audioTitle = document.createElement('div');
+      audioTitle.textContent = alt;
+      image.appendChild(audioTitle);
+
+      const audioEl = document.createElement('audio');
+      audioEl.controls = true;
+      audioEl.autoplay = true;
+      audioEl.src = url;
+      image.appendChild(audioEl);
+
+      // images
+    } else {
+      image = document.createElement('img');
+
+      image.src = url;
+      image.alt = alt;
+    }
 
     if (isFunction(options.view)) {
       addListener(element, EVENT_VIEW, options.view, {
@@ -342,6 +374,12 @@ export default {
       this.load();
     } else {
       addListener(image, EVENT_LOAD, onLoad = () => {
+        removeListener(image, EVENT_ERROR, onError);
+        this.load();
+      }, {
+        once: true,
+      });
+      addListener(image, EVENT_LOADEDMETADATA, onLoad = () => {
         removeListener(image, EVENT_ERROR, onError);
         this.load();
       }, {

@@ -1,3 +1,6 @@
+# Fork with Video and Audio files view support
+(special thanks to [plepe](https://github.com/plepe/viewerjs/tree/video) for video format support)
+
 # Viewer.js
 
 [![Downloads](https://img.shields.io/npm/dm/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Version](https://img.shields.io/npm/v/viewerjs.svg)](https://www.npmjs.com/package/viewerjs) [![Gzip Size](https://img.shields.io/bundlephobia/minzip/viewerjs.svg)](https://unpkg.com/viewerjs/dist/viewer.common.js)

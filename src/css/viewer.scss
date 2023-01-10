@@ -139,12 +139,34 @@
     right: 0;
     top: 0;
 
-    & > img {
+    & > img, & > video, & > .audio  {
+      background: yellow;
       height: auto;
       margin: 15px auto;
       max-width: 90% !important;
       width: auto;
+
+
+      & > audio {
+        inset: 0 5%;
+        margin: auto;
+        max-width: 900px;
+        position: absolute;
+        width: 90%;
+      }
     }
+
+    & > .audio > div {
+      inset: 0 5% 100px;
+      color: #fff;
+      margin: auto;
+      position: absolute;
+      width: 90%;
+      font-size: 1rem;
+      height: 2rem;
+      text-align: center;
+    }
+
   }
 
   &-footer {
@@ -309,6 +331,7 @@
     position: absolute;
     text-align: center;
     top: 50%;
+    width: 50px;
     width: 50px;
   }
 

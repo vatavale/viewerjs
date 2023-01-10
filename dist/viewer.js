@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-01-01T10:14:49.638Z
+ * Date: 2023-01-09T23:41:36.873Z
  */
 
 (function (global, factory) {
@@ -341,6 +341,7 @@
   var EVENT_FOCUSIN = 'focusin';
   var EVENT_KEY_DOWN = 'keydown';
   var EVENT_LOAD = 'load';
+  var EVENT_LOADEDMETADATA = 'loadedmetadata';
   var EVENT_ERROR = 'error';
   var EVENT_TOUCH_END = IS_TOUCH_DEVICE ? 'touchend touchcancel' : 'mouseup';
   var EVENT_TOUCH_MOVE = IS_TOUCH_DEVICE ? 'touchmove' : 'mousemove';
@@ -375,7 +376,7 @@
   var DATA_ACTION = "".concat(NAMESPACE, "Action");
 
   // RegExps
-  var REGEXP_SPACES = /\s\s*/;
+  var REGEXP_SPACES = /\s+/;
 
   // Misc
   var BUTTONS = ['zoom-in', 'zoom-out', 'one-to-one', 'reset', 'prev', 'play', 'next', 'rotate-left', 'rotate-right', 'flip-horizontal', 'flip-vertical'];
@@ -840,6 +841,12 @@
     // Modern browsers (except Safari)
     if (image.naturalWidth && !IS_SAFARI) {
       callback(image.naturalWidth, image.naturalHeight);
+      return newImage;
+    }
+
+    // If the element is a video
+    if (image.videoWidth) {
+      callback(image.videoWidth, image.videoHeight);
       return newImage;
     }
     var body = document.body || document.documentElement;
@@ -1638,6 +1645,9 @@
           addListener(image, EVENT_LOAD, _this3.loadImage.bind(_this3), {
             once: true
           });
+          addListener(image, EVENT_LOADEDMETADATA, _this3.loadImage.bind(_this3), {
+            once: true
+          });
           dispatchEvent(image, EVENT_LOAD);
         });
       }
@@ -1835,15 +1845,44 @@
       var img = item.querySelector('img');
       var url = getData(img, 'originalUrl');
       var alt = img.getAttribute('alt');
-      var image = document.createElement('img');
+      var image = null;
       forEach(options.inheritedAttributes, function (name) {
         var value = img.getAttribute(name);
         if (value !== null) {
           image.setAttribute(name, value);
         }
       });
-      image.src = url;
-      image.alt = alt;
+
+      // video
+      if (url.match(/\.mov|.avi|.qt'|.mp4|.mkv|.wmv|.web|.mpe|.mpg|.m2v|.m4v|.mts|.ts'|.3gp|.flv|.f4v|.ogv$/)) {
+        image = document.createElement('video');
+        image.controls = true;
+        image.autoplay = true;
+        image.alt = alt;
+        var videoSource = document.createElement('source');
+        videoSource.src = url;
+        videoSource.type = 'video/mp4';
+        image.appendChild(videoSource);
+
+        // audio
+      } else if (url.match(/\.wav|.mp3|.fla|.m4a|.m4b|.m4p|.opu|.wma|.pcm|.aif|.aac|.oga$/)) {
+        image = document.createElement('div');
+        image.classList.add('audio');
+        var audioTitle = document.createElement('div');
+        audioTitle.textContent = alt;
+        image.appendChild(audioTitle);
+        var audioEl = document.createElement('audio');
+        audioEl.controls = true;
+        audioEl.autoplay = true;
+        audioEl.src = url;
+        image.appendChild(audioEl);
+
+        // images
+      } else {
+        image = document.createElement('img');
+        image.src = url;
+        image.alt = alt;
+      }
       if (isFunction(options.view)) {
         addListener(element, EVENT_VIEW, options.view, {
           once: true
@@ -1917,6 +1956,12 @@
         this.load();
       } else {
         addListener(image, EVENT_LOAD, onLoad = function onLoad() {
+          removeListener(image, EVENT_ERROR, onError);
+          _this2.load();
+        }, {
+          once: true
+        });
+        addListener(image, EVENT_LOADEDMETADATA, onLoad = function onLoad() {
           removeListener(image, EVENT_ERROR, onError);
           _this2.load();
         }, {
@@ -3239,3 +3284,4 @@
   return Viewer;
 
 }));
+//# sourceMappingURL=viewer.js.map
