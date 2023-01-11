@@ -103,28 +103,17 @@
   right: 0;
   top: 0;
 }
-.viewer-canvas > img, .viewer-canvas > video, .viewer-canvas > .audio {
-  background: yellow;
+.viewer-canvas > img, .viewer-canvas > video {
   height: auto;
   margin: 15px auto;
   max-width: 90% !important;
   width: auto;
 }
-.viewer-canvas > img > audio, .viewer-canvas > video > audio, .viewer-canvas > .audio > audio {
+.viewer-canvas > audio {
   inset: 0 5%;
   margin: auto;
   max-width: 900px;
   position: absolute;
-  width: 90%;
-}
-.viewer-canvas > .audio > div {
-  color: #fff;
-  font-size: 1rem;
-  height: 2rem;
-  inset: 0 5% 100px;
-  margin: auto;
-  position: absolute;
-  text-align: center;
   width: 90%;
 }
 .viewer-footer {

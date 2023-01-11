@@ -13,7 +13,7 @@ import {
   EVENT_ERROR,
   EVENT_HIDE,
   EVENT_LOAD,
-  EVENT_LOADEDMETADATA,
+  EVENT_CANPLAY,
   EVENT_MOVE,
   EVENT_MOVED,
   EVENT_PLAY,
@@ -257,26 +257,16 @@ export default {
       image.controls = true;
       image.autoplay = true;
       image.alt = alt;
-
-      const videoSource = document.createElement('source');
-      videoSource.src = url;
-      videoSource.type = 'video/mp4';
-      image.appendChild(videoSource);
+      image.src = url;
 
       // audio
     } else if (url.match(/\.wav|.mp3|.fla|.m4a|.m4b|.m4p|.opu|.wma|.pcm|.aif|.aac|.oga$/)) {
-      image = document.createElement('div');
-      image.classList.add('audio');
-      const audioTitle = document.createElement('div');
-      audioTitle.textContent = alt;
-      image.appendChild(audioTitle);
-
-      const audioEl = document.createElement('audio');
-      audioEl.controls = true;
-      audioEl.autoplay = true;
-      audioEl.src = url;
-      image.appendChild(audioEl);
-
+      image = document.createElement('audio');
+      image.controls = true;
+      image.autoplay = true;
+      image.alt = alt;
+      image.src = url;
+      image.classList.add('nozoom');
       // images
     } else {
       image = document.createElement('img');
@@ -379,7 +369,7 @@ export default {
       }, {
         once: true,
       });
-      addListener(image, EVENT_LOADEDMETADATA, onLoad = () => {
+      addListener(image, EVENT_CANPLAY, onLoad = () => {
         removeListener(image, EVENT_ERROR, onError);
         this.load();
       }, {
@@ -387,6 +377,7 @@ export default {
       });
       addListener(image, EVENT_ERROR, onError = () => {
         removeListener(image, EVENT_LOAD, onLoad);
+        removeListener(image, EVENT_CANPLAY, onLoad);
 
         if (this.timeout) {
           clearTimeout(this.timeout);

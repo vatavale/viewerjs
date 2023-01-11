@@ -10,7 +10,7 @@ import {
   EVENT_CLICK,
   EVENT_DBLCLICK,
   EVENT_LOAD,
-  EVENT_LOADEDMETADATA,
+  EVENT_CANPLAY,
   EVENT_VIEWED,
   IS_TOUCH_DEVICE,
 } from './constants';
@@ -158,14 +158,16 @@ export default {
       removeClass(this.canvas, CLASS_LOADING);
     }
 
-    image.style.cssText = (
-      'height:0;'
-      + `margin-left:${viewerData.width / 2}px;`
-      + `margin-top:${viewerData.height / 2}px;`
-      + 'max-width:none!important;'
-      + 'position:relative;'
-      + 'width:0;'
-    );
+    if (!image.classList.contains('nozoom')) {
+      image.style.cssText = (
+        'height:0;'
+        + `margin-left:${viewerData.width / 2}px;`
+        + `margin-top:${viewerData.height / 2}px;`
+        + 'max-width:none!important;'
+        + 'position:relative;'
+        + 'width:0;'
+      );
+    }
 
     this.initImage(() => {
       toggleClass(image, CLASS_MOVE, options.movable);
@@ -515,7 +517,7 @@ export default {
         addListener(image, EVENT_LOAD, this.loadImage.bind(this), {
           once: true,
         });
-        addListener(image, EVENT_LOADEDMETADATA, this.loadImage.bind(this), {
+        addListener(image, EVENT_CANPLAY, this.loadImage.bind(this), {
           once: true,
         });
         dispatchEvent(image, EVENT_LOAD);

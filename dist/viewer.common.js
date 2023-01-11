@@ -5,7 +5,7 @@
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2023-01-10T10:54:40.745Z
+ * Date: 2023-01-11T07:53:40.259Z
  */
 
 'use strict';
@@ -337,7 +337,7 @@ var EVENT_DRAG_START = 'dragstart';
 var EVENT_FOCUSIN = 'focusin';
 var EVENT_KEY_DOWN = 'keydown';
 var EVENT_LOAD = 'load';
-var EVENT_LOADEDMETADATA = 'loadedmetadata';
+var EVENT_CANPLAY = 'canplay';
 var EVENT_ERROR = 'error';
 var EVENT_TOUCH_END = IS_TOUCH_DEVICE ? 'touchend touchcancel' : 'mouseup';
 var EVENT_TOUCH_MOVE = IS_TOUCH_DEVICE ? 'touchmove' : 'mousemove';
@@ -1354,7 +1354,11 @@ var handlers = {
     if (options.loading) {
       removeClass(this.canvas, CLASS_LOADING);
     }
+
+    // if (!image.classList.contains('nozoom')) {
     image.style.cssText = 'height:0;' + "margin-left:".concat(viewerData.width / 2, "px;") + "margin-top:".concat(viewerData.height / 2, "px;") + 'max-width:none!important;' + 'position:relative;' + 'width:0;';
+    // }
+
     this.initImage(function () {
       toggleClass(image, CLASS_MOVE, options.movable);
       toggleClass(image, CLASS_TRANSITION, options.transition);
@@ -1641,7 +1645,7 @@ var handlers = {
         addListener(image, EVENT_LOAD, _this3.loadImage.bind(_this3), {
           once: true
         });
-        addListener(image, EVENT_LOADEDMETADATA, _this3.loadImage.bind(_this3), {
+        addListener(image, EVENT_CANPLAY, _this3.loadImage.bind(_this3), {
           once: true
         });
         dispatchEvent(image, EVENT_LOAD);
@@ -1855,24 +1859,16 @@ var methods = {
       image.controls = true;
       image.autoplay = true;
       image.alt = alt;
-      var videoSource = document.createElement('source');
-      videoSource.src = url;
-      videoSource.type = 'video/mp4';
-      image.appendChild(videoSource);
+      image.src = url;
 
       // audio
     } else if (url.match(/\.wav|.mp3|.fla|.m4a|.m4b|.m4p|.opu|.wma|.pcm|.aif|.aac|.oga$/)) {
-      image = document.createElement('div');
-      image.classList.add('audio');
-      var audioTitle = document.createElement('div');
-      audioTitle.textContent = alt;
-      image.appendChild(audioTitle);
-      var audioEl = document.createElement('audio');
-      audioEl.controls = true;
-      audioEl.autoplay = true;
-      audioEl.src = url;
-      image.appendChild(audioEl);
-
+      image = document.createElement('audio');
+      image.controls = true;
+      image.autoplay = true;
+      image.alt = alt;
+      image.src = url;
+      image.classList.add('nozoom');
       // images
     } else {
       image = document.createElement('img');
@@ -1957,7 +1953,7 @@ var methods = {
       }, {
         once: true
       });
-      addListener(image, EVENT_LOADEDMETADATA, onLoad = function onLoad() {
+      addListener(image, EVENT_CANPLAY, onLoad = function onLoad() {
         removeListener(image, EVENT_ERROR, onError);
         _this2.load();
       }, {
@@ -1965,6 +1961,7 @@ var methods = {
       });
       addListener(image, EVENT_ERROR, onError = function onError() {
         removeListener(image, EVENT_LOAD, onLoad);
+        removeListener(image, EVENT_CANPLAY, onLoad);
         if (_this2.timeout) {
           clearTimeout(_this2.timeout);
           _this2.timeout = false;
